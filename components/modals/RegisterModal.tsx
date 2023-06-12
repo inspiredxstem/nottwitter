@@ -1,10 +1,13 @@
 import { useCallback, useState } from "react";
-
+import {signIn} from 'next-auth/react'
+ 
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
 
 import Input from "../Input";
 import Modal from "../Modal";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const RegisterModal = () => {
     const loginModal = useLoginModal();
@@ -25,19 +28,32 @@ const RegisterModal = () => {
         loginModal.onOpen()
     }, [isLoading, registerModal, loginModal])
 
-    const onSubmit = useCallback(() => {
+    const onSubmit = useCallback(async () => {
         try {
             setIsLoading(true)
 
             // TODO Register and Log In
+            await axios.post('/api/register', {
+                email,
+                password,
+                userName,
+                name 
+            })
+
+            toast.success('Account created!')
+            signIn('credentials', {
+                email,
+                password
+            })
 
             registerModal.onClose();
         } catch (error) {
             console.log(error)
+            toast.error('You did bad!')
         } finally {
             setIsLoading(false)
         }
-    }, [registerModal])
+    }, [registerModal, email, password, userName, name])
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -61,6 +77,7 @@ const RegisterModal = () => {
             />
             <Input 
                 placeholder="Password"
+                type='password'
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 disabled={isLoading}
@@ -70,7 +87,7 @@ const RegisterModal = () => {
 
     const footerContent = (
         <div className="text-neutral-400 text-center mt-4">
-            <p>Already have an account?  
+            <p>Already have an account?   
                 <span 
                     onClick={onToggle}
                     className="
