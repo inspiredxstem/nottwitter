@@ -22,7 +22,7 @@ export default async function handler(
             }
         })
 
-        const followersCount = await prisma.user.count({
+    const followersCount = await prisma.user.count({
             where : {
                 followingIds : {
                     has: userId
@@ -30,11 +30,9 @@ export default async function handler(
             }
         })
 
-        return res.status(200).json({...existUser, followersCount})
-        
-    } catch (error) {
+    return res.status(200).json({ ...existUser, followersCount });
+  } catch (error) {
         console.log(error)
         return res.status(400).end()
     }
-
-}
+};
