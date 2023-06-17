@@ -3,6 +3,7 @@ import useLoginModal from "@/hooks/useLoginModal";
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
 import { IconType } from "react-icons";
+import { BsDot } from 'react-icons/bs'
 
 interface SidebarItemProp {
     label: string;
@@ -17,7 +18,8 @@ const SidebarItem: React.FC<SidebarItemProp> = ({
     href,
     icon: Icon,
     onClick,
-    auth
+    auth,
+    alert
 }) => {
     const loginModal = useLoginModal()
     const {data: currentUser} = useCurrentUser()

@@ -13,7 +13,6 @@ export default async function handler(
 
     try {
         const {postId} = req.body
-
         const {currentUser} = await serverAuth(req, res)
 
         if(!postId || typeof postId !== 'string') {
@@ -36,8 +35,10 @@ export default async function handler(
             updatedLikedIds.push(currentUser.id)
         }
 
-        if(req.method === 'DELETE'){
-            updatedLikedIds = updatedLikedIds.filter((likedId) => likedId !== currentUser.id )
+        if(req.method === "DELETE"){
+            updatedLikedIds = updatedLikedIds.filter((likedId) => {
+                likedId !== currentUser?.id
+            } )
         }
 
         const updatedPost = await prisma.post.update({
