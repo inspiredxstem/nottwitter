@@ -27,7 +27,7 @@ const SidebarTweetButton = () => {
                 hover:bg-opacity-80
                 transition
                 cursor-pointer
-            "> // This is for mobile viewing/scaling
+            "> {/* This is for mobile viewing/scaling */} 
                 <FaFeather size={24} color="white"/>
             </div>
 
