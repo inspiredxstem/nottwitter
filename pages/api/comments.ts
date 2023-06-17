@@ -24,6 +24,36 @@ export default async function name(req: NextApiRequest, res: NextApiResponse) {
             }
         })
 
+
+        try {
+            const post = await prisma.post.findUnique({
+                where: {
+                    id: postId
+                }
+            })
+
+            if(post?.userId) {
+                await prisma.notification.create({
+                    data: {
+                        body: 'Soooo someone replied to your post teehee',
+                        userId: post.userId
+                    }
+                })
+                
+                await prisma.user.update({
+                    where: {
+                        id: post.userId
+                    },
+                    data: {
+                        hasNotification: true
+                    }
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+
         return res.status(200).json(comment)
     } catch (error) {
         console.log(error)
